@@ -66,7 +66,9 @@ def main():
 			# Wait for the job to complete.
 			myJob.submit()
 			myJob.waitForCompletion()
-
+			e = time.time()
+			with open(log_project_path,'a') as f:
+				f.write("Finish {} calculating,using time {}:{}:{}\n".format(modelName,ht,mt,st))
 			# open result odb file
 			res_dict = {}
 			odb = openOdb(path=jobName + '.odb')
@@ -77,8 +79,7 @@ def main():
 					for pointName in region.historyOutputs.keys():
 						data = region.historyOutputs[pointName].data
 						key = "{}@{}@{}@{}".format(waveid,stepName,regionName,pointName)
-						with open(log_project_path,'a') as f:
-							f.write(key+'\n')
+
 						# add data into res_dict
 						res_dict[key] = data
 
@@ -88,7 +89,7 @@ def main():
 			e = time.time()
 			ht,mt,st = get_format_time(s,e)
 			with open(log_project_path,'a') as f:
-				f.write("Finish {},using time {}:{}:{}\n".format(modelName,ht,mt,st))
+				f.write("Finish {} saving,using time {}:{}:{}\n".format(modelName,ht,mt,st))
 
 			## kill the job and close odb
 			myJob.kill()
