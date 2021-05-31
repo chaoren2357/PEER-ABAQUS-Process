@@ -12,7 +12,9 @@
   $ cd PEER-ABAQUS-Process-master
   ```
 
-- Rename your model to `model_sample.inp` and replace the original `Models/model_sample.inp`.
+- Add folder under `Models` folder with your own project name, e.g. `ThreeLayersFrame`, and modify the `projectNames =  ["ThreeLayersName","FiveLayersName"]` into your project name in `main` function of `preproccess.py` and `autoRun.py`.
+
+- Rename your model to `model_sample.inp` and replace the original `Models/YourProjectName/model_sample.inp`.
 
 - In your normal command(e.g. Anaconda Prompt), run `preprocess.py`
 
@@ -20,15 +22,17 @@
     $ python preprocess.py
     ```
     
+    Then, you can see that `modelXXX.inp` files are under `Models/YourProjectName/`
+    
 - In Abaqus command, run `autoRun.py`
 
     ```python
     $ abaqus cae noGUI=autoRun.py
     ```
     
-    While running, you can check the log in `Result/log.txt`
+    While running, you can check the log in `Result/YourProjectName/log.txt`
     
-    The results are  `Result/res_dict_XXX.pkl`
+    The results are  `Result/YourProjectName/res_dict_XXX.pkl`
 
 # Folder Structure
 
@@ -41,16 +45,20 @@ PEER-ABAQUS-Process
     │   ├── ...
     │
     ├── Models (Input models of Abaqus)
-    │   ├── model_sample.inp 
-    │   ├── model000.inp 
-    │   ├── model001.inp 
-    │   ├── ...
+    │   ├── ThreeLayersFrame (project name)
+    │       ├── model_sample.inp 
+    │       ├── model000.inp 
+    │       ├── model001.inp
+    |       ├── ...
     │
     ├── Result (The output file of process)
-    │   ├── id_data_map.pkl
-    │   ├── id_wavename_map.pkl
-    │   ├── log.txt
-    │   ├── res_dict.pkl
+    │   ├── ThreeLayersFrame 
+    │       ├── id_data_map.pkl
+    │       ├── id_wavename_map.pkl
+    │       ├── log.txt
+    |       ├── res_dict_00.pkl
+    │       ├── res_dict_01.pkl
+    |       ├── ...    
     ├── utils.py   
     ├── preprocess.py 
     ├── autoRun.py
@@ -78,8 +86,7 @@ File Description
 
 	```
   keys: 0,1,2,3,4,....
-  values:"Borrego@RSN9_BORREGO_B-ELC000.AT2",
-	"Borrego@RSN9_BORREGO_B-ELC090.AT2",...
+  values:"Borrego@RSN9_BORREGO_B-ELC000.AT2","Borrego@RSN9_BORREGO_B-ELC090.AT2",...
 	```
 - `res_dict_XXX` is a python dictionary that contains the Node --- Amplitude data. 
 
@@ -91,9 +98,8 @@ File Description
 	```
   keys: '0@Step-1@Node PART-1-1.100@A1', '0@Step-1@Node PART-1-1.101@A1', '0@Step-1@Node PART-1-1.102@A1',...
   values:((0.0, 0.0), (0.0199999995529652, 0.000782696530222893), (0.0399999991059303, 0.00512317474931479), (0.0599999986588955, -0.0077408947981894),...)
-  
 
-Attention that amplitude data is always in shape 1550*2, because I set the time interval of 0.02 seconds and the total length of 31 seconds. It can be modified in inp file.
+Attention that the output file in in the save interval and total time with the input seismic data.
 
 License
 =======

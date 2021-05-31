@@ -57,11 +57,11 @@ def main():
 			# create name for model and job
 			modelName = 'model'+ str(waveid).zfill(3)
 			jobName = 'job'+ str(waveid).zfill(3)
-			model_path = os.path.join("Models",projectName,modelName)
-			pkl_path = os.path.join("Result","res_dict_{}.pkl".format(waveid))
+			model_path = os.path.join("Models",projectName,modelName+".inp")
+			pkl_path = os.path.join("Result",projectName,"res_dict_{}.pkl".format(waveid))
 
-			myModel = mdb.ModelFromInputFile(projectName, model_path)
-			myJob = mdb.Job(name=jobName, model=projectName,description='{} seismic design'.format(projectName))
+			myModel = mdb.ModelFromInputFile(modelName, model_path)
+			myJob = mdb.Job(name=jobName, model=modelName,description='{} seismic design'.format(projectName))
 
 			# Wait for the job to complete.
 			myJob.submit()
@@ -77,7 +77,8 @@ def main():
 					for pointName in region.historyOutputs.keys():
 						data = region.historyOutputs[pointName].data
 						key = "{}@{}@{}@{}".format(waveid,stepName,regionName,pointName)
-
+						with open(log_project_path,'a') as f:
+							f.write(key+'\n')
 						# add data into res_dict
 						res_dict[key] = data
 

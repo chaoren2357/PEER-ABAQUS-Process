@@ -69,7 +69,7 @@ def create_model_inp(model_id,interval,seismic_data,project_model_path):
 			timeId = idx +1
 			break
 	total_time = max([x for x,_ in seismic_data])
-	data_next[timeId] = "{},{}\n".format(interval,total_time)
+	data_next[timeId] = "{},{},\n".format(interval,total_time)
 
 	# output the modelXXX.inp
 	output = "".join(data_prev)+data_process+"".join(data_next)
@@ -108,7 +108,7 @@ def extract_seismic_data(filepath):
 
 def main():
 	# basic informations
-	projectNames = ['ThreeLayersFrame','FiveLayersFrame']
+	projectNames = ['ThreeLayersFrame' ,'FiveLayersFrame']
 	CUR_PATH = Path(__file__).absolute().parent
 	RESULT_PATH = CUR_PATH / "Result"
 	MODEL_PATH = CUR_PATH / "Models"
