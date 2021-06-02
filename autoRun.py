@@ -67,6 +67,7 @@ def main():
 			myJob.submit()
 			myJob.waitForCompletion()
 			e = time.time()
+			ht,mt,st = get_format_time(s,e)
 			with open(log_project_path,'a') as f:
 				f.write("Finish {} calculating,using time {}:{}:{}\n".format(modelName,ht,mt,st))
 			# open result odb file
