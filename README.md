@@ -104,4 +104,4 @@ Attention that the output file in in the save interval and total time with the i
 License
 =======
 
-Please check LICENSE file
+MIT License
