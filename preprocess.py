@@ -108,7 +108,7 @@ def extract_seismic_data(filepath):
 
 def main():
 	# basic informations
-	projectNames = ['ThreeLayersFrame' ,'FiveLayersFrame']
+	projectNames = ['ThreeLayersFrameWithDamping' ,'FiveLayersFrameWithDamping']
 	CUR_PATH = Path(__file__).absolute().parent
 	RESULT_PATH = CUR_PATH / "Result"
 	MODEL_PATH = CUR_PATH / "Models"
