@@ -6,31 +6,54 @@ utils.py
 utils for the project
 """
 
-import pickle
+import time
+import json
+import logging
+import os
+import glob
+class Logger():
+    def __init__(self,log_name = 'debug.log'):
+        logging.basicConfig(filename=log_name,level=logging.DEBUG,format='%(asctime)s %(levelname)s:%(message)s',datefmt='%Y-%m-%d %H:%M:%S')
+        self.s_flag = False
+
+    def debug(self,content):
+
+        if ">>" in content:
+            self.s = time.time()
+            self.s_flag = True
+        elif "<<" in content:
+            if self.s_flag:
+                during = time.time() - self.s
+                hour = during//3600
+                minute = (during-hour*3600)//60
+                sec = during-hour*3600-minute*60
+                content += ". Using time {:>2n}:{:>2n}:{:>2n}.".format(hour,minute,int(sec))
+                self.s_flag = False
+            else:
+                logging.debug("Can not recongnize timer end flag")
+                self.s_flag = False
+        logging.debug(content)
 
 
-def load_pkl(addr):
-    with open(addr,'rb') as fo:
-        return pickle.load(fo) 
-def save_pkl(content,addr,is_print = False):
-    with open(addr,'wb') as fo:
-        pickle.dump(content,fo)
-    if is_print:
-        print("finish saving ",addr)
+
+def main():
+    print()
+
+
+
+
+
+def save_json(content,addr):
+    with open(addr, "w") as f:
+        json.dump(content, f, indent=4)  # 传入文件描述符，和dumps一样的结果
+
 def save_txt(content,addr = 'output.txt'):
 	with open(addr,'wb') as f:
 		f.write(content)
 def read_file(addr):
 	with open(addr,'r') as f:
 		return f.read()
-def get_format_time(*args):
-    if len(args) == 1:
-        during = args[0]
-    elif len(args) == 2:
-        during = args[1] - args[0]
-    else:
-        raise ValueError
-    h = during//3600
-    m = (during-h*3600)//60
-    sec = during-h*3600-m*60
-    return str(int(h)).zfill(3),str(int(m)).zfill(2),str(int(sec)).zfill(2) 
+
+
+if __name__ == '__main__':
+    main()

@@ -1,2 +1,9 @@
 
 .DS_Store
+*.zip
+*.log
+__pycache__
+job_list
+result
+resource/model/*.inp
+resource/seismic_data/*.dat

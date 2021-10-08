@@ -17,7 +17,80 @@ from utils import *
 import os
 import time
 
+def datacheck(inpfile_path,logger = None):
+	name = os.path.splitext(os.path.basename(inpfile_path))[0]
+	cmd_check = "abaqus job={} datacheck".format(name)
+	status_check = os.system(cmd_check)
+	return status_check
+
+
+
+def calculate(inpfile_path,logger = None):
+	name = os.path.splitext(os.path.basename(inpfile_path))[0]
+	cmd_calculate = "abaqus job={} continue".format(name)
+	status_calculate = os.system(cmd_calculate)
+	return status_calculate
+
+
+
+
+def calculate_inpy(inpfile_path,logger = None):
+	modelName = os.path.splitext(os.path.basename(inpfile_path))[0]
+	jobName = os.path.splitext(os.path.basename(inpfile_path))[0]
+	myModel = mdb.ModelFromInputFile(modelName, inpfile_path)
+	myJob = mdb.Job(name=jobName, model=modelName,numDomains=100) # ,numCpus=12)# ,environment = (('node1','12'),))
+	# Wait for the job to complete.
+	myJob.submit()
+	myJob.waitForCompletion()
+
+def readODB(odbfile_path,logger = None):
+	res_dict = {}
+	odb = openOdb(path=odbfile_path)
+	for stepName in odb.steps.keys():
+		step = odb.steps[stepName]
+		for regionName in step.historyRegions.keys():
+			region = step.historyRegions[regionName]
+			res_dict[regionName] = {}
+			for phyQuant in region.historyOutputs.keys():
+				res_dict[regionName][phyQuant] = []
+				for t,dat in region.historyOutputs[phyQuant].data:
+					res_dict[regionName][phyQuant].append(dat)
+	return res_dict
+
 def main():
+	logger = Logger()
+	# if not os.path.isdir('job_list'):
+	# 	logger.debug("There is no job_list folder. You should run preprocess.py first.")
+	# 	return 
+	all_file = list(glob.glob('*.inp'))
+
+	for idx,inpfile_path in enumerate(all_file):
+		name = os.path.splitext(os.path.basename(inpfile_path))[0]
+
+		# logger.debug("Start datacheck {} >>".format(name))
+		# datacheck(inpfile_path,logger)
+		# logger.debug("End datacheck {} <<".format(name))
+
+		logger.debug("Start calculate {} >>".format(name))
+		calculate(inpfile_path,logger)
+		logger.debug("End calculate {} <<".format(name))
+
+		# odbfile_path= name + '.odb'
+		# logger.debug("Start saving the result of {} >>".format(name))
+		# res_dict = readODB(odbfile_path)
+		# save_json(res_dict,'{}.json'.format(name))
+		# logger.debug("End saving the result of {} <<".format(name))
+
+		
+		if idx % int(0.1*len(all_file))== 0:
+			logger.debug("{} files left".format(len(all_file)-idx-1))
+
+
+
+
+				
+
+def past():
 
 	projectNames = ['ThreeLayersFrame','FiveLayersFrame']
 	for projectName in projectNames:
