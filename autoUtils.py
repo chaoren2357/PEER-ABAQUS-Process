@@ -19,7 +19,7 @@ import time
 
 def datacheck(inpfile_path,logger = None):
 	name = os.path.splitext(os.path.basename(inpfile_path))[0]
-	cmd_check = "abaqus job={} datacheck".format(name)
+	cmd_check = "abaqus job={} datacheck memory='10 gb'".format(name)
 	status_check = os.system(cmd_check)
 	return status_check
 
@@ -27,7 +27,7 @@ def datacheck(inpfile_path,logger = None):
 
 def calculate(inpfile_path,logger = None):
 	name = os.path.splitext(os.path.basename(inpfile_path))[0]
-	cmd_calculate = "abaqus job={} continue".format(name)
+	cmd_calculate = "abaqus job={} continue memory='10 gb'".format(name)
 	status_calculate = os.system(cmd_calculate)
 	return status_calculate
 
@@ -38,7 +38,7 @@ def calculate_inpy(inpfile_path,logger = None):
 	modelName = os.path.splitext(os.path.basename(inpfile_path))[0]
 	jobName = os.path.splitext(os.path.basename(inpfile_path))[0]
 	myModel = mdb.ModelFromInputFile(modelName, inpfile_path)
-	myJob = mdb.Job(name=jobName, model=modelName,numDomains=100) # ,numCpus=12)# ,environment = (('node1','12'),))
+	myJob = mdb.Job(name=jobName, model=modelName,numDomains=120,numCpus=12)# ,environment = (('node1','12'),))
 	# Wait for the job to complete.
 	myJob.submit()
 	myJob.waitForCompletion()
